@@ -1,7 +1,8 @@
 package com.videoteca.web;
 
 import com.videoteca.model.Anime;
-import com.videoteca.service.AnimeService;
+import com.videoteca.model.front.AnimeFront;
+import com.videoteca.service.impl.AnimeServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -11,7 +12,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.annotation.Resource;
 import java.io.IOException;
 import java.util.List;
 
@@ -19,18 +19,18 @@ import java.util.List;
 @RequestMapping("/videoteca/anime")
 public class AnimeController {
     @Autowired
-    private final AnimeService animeService;
+    private final AnimeServiceImpl animeService;
 
-    public AnimeController(AnimeService animeService) {
+    public AnimeController(AnimeServiceImpl animeService) {
         this.animeService = animeService;
     }
 
     @PostMapping("/guardar")
-    public Anime guardarAnime(@RequestBody Anime anime) throws IOException {
-        return animeService.crearAnime(anime);
+    public Anime guardarAnime(@RequestBody AnimeFront anime) {
+        return animeService.createAnime(anime);
     }
 
-    @GetMapping("/buscar")
+    @GetMapping("/buscar/titulo")
     public ResponseEntity<List<Anime>> obtainAnimeBuscar(@RequestParam("titulo") String titulo) {
         List<Anime> animes = animeService.buscarAnime(titulo);
         if (!animes.isEmpty()) {
@@ -43,6 +43,16 @@ public class AnimeController {
     @GetMapping("/todos")
     public ResponseEntity<List<Anime>> obtenerTodosLosAnimes() {
         List<Anime> animes = animeService.buscarTodos();
+        if (!animes.isEmpty()) {
+            return ResponseEntity.ok(animes);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    @GetMapping("/buscar/tipo")
+    public ResponseEntity<List<Anime>> obtenerPorTitulo(@RequestParam("tipo") String tipo){
+        List<Anime> animes = animeService.buscarAnimePorTipo(tipo);
         if (!animes.isEmpty()) {
             return ResponseEntity.ok(animes);
         } else {

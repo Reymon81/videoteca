@@ -11,6 +11,5 @@ public class Anime {
     @Id
     private String id;
     private String titulo;
-    private String tipo;
-    private int temporada;
+    private Detalle detalles;
 }

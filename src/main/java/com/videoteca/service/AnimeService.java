@@ -1,35 +1,17 @@
 package com.videoteca.service;
 
 import com.videoteca.model.Anime;
-import com.videoteca.repository.AnimeRepository;
-import org.apache.commons.io.FileUtils;
-import org.bson.types.ObjectId;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.mongodb.gridfs.GridFsTemplate;
-import org.springframework.stereotype.Service;
+import com.videoteca.model.front.AnimeFront;
 
-import java.io.ByteArrayInputStream;
-import java.io.File;
-import java.io.IOException;
 import java.util.List;
 
-@Service
-public class AnimeService {
+public interface AnimeService {
 
-    private final AnimeRepository animeRepository;
-    @Autowired
-    public AnimeService(AnimeRepository animeRepository) {
-        this.animeRepository = animeRepository;
-    }
+    Anime createAnime(AnimeFront anime);
 
-    public Anime crearAnime(Anime anime){ return animeRepository.save(anime);  }
+    List<Anime> buscarAnime(String anime);
 
-    public List<Anime> buscarAnime(String anime){
-        return animeRepository.findByTitulo(anime);
-    }
+    List<Anime> buscarTodos();
 
-    public List<Anime> buscarTodos(){
-        return animeRepository.findAll();
-    }
-
+    List<Anime> buscarAnimePorTipo(String tipo);
 }
